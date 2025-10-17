@@ -12,14 +12,43 @@ const CURRENCY_UNITS = {
 };
 
 export default function App() {
-
+  
+  const CURRENCY_RATE_API_KEY = import.meta.env.VITE_CURRENCY_RATE_API_KEY
   const balanceMYR = 8888.88; /* default balance */
   const [currency, setCurrency] = useState("MYR");
-  const [rates, setRates] = useState({
-    MYR : 1,
-    SGD : 0.3,
-    CNY : 1.5,
-  });
+  const [rates, setRates] = useState({MYR : 1,});
+  console.log("Using API key:", CURRENCY_RATE_API_KEY);
+
+  useEffect(() => {
+    async function fetchRates() {
+      try {
+        const url = `https://api.currencyfreaks.com/v2.0/rates/latest?apikey=${CURRENCY_RATE_API_KEY}&symbols=MYR,SGD,CNY`;
+        const results = await fetch(url);
+        const data = await results.json();
+        console.log("Fetched data : ", data);
+
+        const USD_MYR = parseFloat(data.rates.MYR);
+        const USD_SGD = parseFloat(data.rates.SGD);
+        const USD_CNY = parseFloat(data.rates.CNY);
+
+        // Convert to MYR base: 1 MYR = (USD_target / USD_MYR)
+        const MYR_to_SGD = USD_SGD / USD_MYR;
+        const MYR_to_CNY = USD_CNY / USD_MYR;
+
+        //set rates
+        setRates({
+          MYR : 1,
+          SGD : MYR_to_SGD,
+          CNY : MYR_to_CNY,
+        });
+        
+      } catch (error){
+        console.error("API Fetch FAILED", error)
+      }
+    }
+    fetchRates();
+  }, [CURRENCY_RATE_API_KEY]);
+
 
   const converted = useMemo(
     () => balanceMYR * (rates[currency] ?? 1), /* ?? 1 defaults to 1 if currency dont exist */
@@ -38,7 +67,7 @@ export default function App() {
           <div className="Money">
             {/* Currency Converter */}
             <div className="Currency-Selector">
-              <select id="Currency" value="{currency}" onChange={(e) => setCurrency(e.target.value)}>
+              <select id="Currency" value={currency} onChange={(e) => setCurrency(e.target.value)}>
                 <option value="MYR">MYR</option>
                 <option value="CNY">CNY</option>
                 <option value="SGD">SGD</option>
@@ -47,7 +76,7 @@ export default function App() {
 
             {/* Balance */}
             <div className="Balance">
-              <h1> <span class="Unit">{CURRENCY_UNITS[currency].symbol}</span> {fmt2dp(converted)}</h1>
+              <h1> <span className="Unit">{CURRENCY_UNITS[currency].symbol}</span> {fmt2dp(converted)}</h1>
             </div>
           </div>
 
