@@ -2,8 +2,17 @@ import profile from "./assets/Profile-Icon.png";
 import cashFlow from "./assets/Cash-Flow.png";
 import topUp from "./assets/Top-Up.png";
 import transfer from "./assets/Transfer.png";
+import {useEffect, useMemo, useState } from "react";
+
+/* const that never changes placed outside */
+const CURRENCY_META = {
+  MYR: { symbol: "RM", label: "MYR" },
+  SGD: { symbol: "S$", label: "SGD" },
+  CNY: { symbol: "¥",  label: "CNY" },
+};
 
 export default function App() {
+
   return (
     <div className="App-shell">
       {/* Top Bar containing currency and balance */}
@@ -13,14 +22,14 @@ export default function App() {
             <div className="Currency-Selector">
               <select id="Currency" value="{currency}" onChange={(e) => setCurrency(e.target.value)}>
                 <option value="MYR">MYR</option>
-                <option value="YUAN">YUAN</option>
+                <option value="CNY">CNY</option>
                 <option value="SGD">SGD</option>
               </select>
             </div>
 
             {/* Balance */}
             <div className="Balance">
-              <h1>8888.88</h1>
+              <h1> <span class="Unit">RM</span> 8888.88</h1>
             </div>
           </div>
 
@@ -42,5 +51,5 @@ export default function App() {
 }
 
 function bottomNavBar() {
-  
+
 }
