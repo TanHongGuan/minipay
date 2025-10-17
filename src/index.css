@@ -19,6 +19,7 @@ body {
 
 /* Top Bar */
 .TopBar {
+    display : flex;
     background : #800000;
     height : 15%;
 }
@@ -41,8 +42,31 @@ body {
     color : white;
     font-family :monospace ;
     margin-left : 10px;
-
 }
 
+.Settings {
+    justify-content: center;
+    margin : 10px 10px auto auto;
+}
+.Settings img {
+    border-radius: 50%;
+    width : 40px;
+    height : 40px;
+}
 
+/* Operations */
+#Operations {
+    margin : 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+    gap: 16px;                              /* space between items */
+    place-items: top;                    /* center each image cell */
+}
+
+/* Images: uniform size without distortion */
+#Operations img {
+    width : 100%;
+    object-fit: contain;    /* no squish, keep transparency */
+    display: block;
+}
 
