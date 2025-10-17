@@ -5,13 +5,31 @@ import transfer from "./assets/Transfer.png";
 import {useEffect, useMemo, useState } from "react";
 
 /* const that never changes placed outside */
-const CURRENCY_META = {
+const CURRENCY_UNITS = {
   MYR: { symbol: "RM", label: "MYR" },
   SGD: { symbol: "S$", label: "SGD" },
   CNY: { symbol: "¥",  label: "CNY" },
 };
 
 export default function App() {
+
+  const balanceMYR = 8888.88; /* default balance */
+  const [currency, setCurrency] = useState("MYR");
+  const [rates, setRates] = useState({
+    MYR : 1,
+    SGD : 0.3,
+    CNY : 1.5,
+  });
+
+  const converted = useMemo(
+    () => balanceMYR * (rates[currency] ?? 1), /* ?? 1 defaults to 1 if currency dont exist */
+    [balanceMYR, currency, rates] /*only recaculate converted if any of these changes */
+  )
+
+  const fmt2dp = (n) => new Intl.NumberFormat("en-US",{
+    minimumFractionDigits : 2,
+    maximumFractionDigits : 2,
+  }).format(n);
 
   return (
     <div className="App-shell">
@@ -29,7 +47,7 @@ export default function App() {
 
             {/* Balance */}
             <div className="Balance">
-              <h1> <span class="Unit">RM</span> 8888.88</h1>
+              <h1> <span class="Unit">{CURRENCY_UNITS[currency].symbol}</span> {fmt2dp(converted)}</h1>
             </div>
           </div>
 
