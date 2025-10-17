@@ -16,3 +16,33 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+/* Top Bar */
+.TopBar {
+    background : #800000;
+    height : 15%;
+}
+/* Currency Converter */
+.Currency-Selector {
+    margin : 10px;
+}
+
+.Currency-Selector select {
+    /* remove default arrow */
+    background: none;
+    color : white;
+    border : 1px solid white;
+    border-radius: 9999px;
+    padding : 8px 40px 8px 12px;
+}
+
+.Balance {
+    display : block;
+    color : white;
+    font-family :monospace ;
+    margin-left : 10px;
+
+}
+
+
+
